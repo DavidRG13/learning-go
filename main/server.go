@@ -49,6 +49,7 @@ func (p *PlayerServer) playersHandler(w http.ResponseWriter, r *http.Request) {
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(p.store.GetLeague())
+	w.Header().Set("content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
 }
 
