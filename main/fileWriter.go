@@ -11,19 +11,16 @@ type FileSystemPlayerStore struct {
 
 func (s *FileSystemPlayerStore) GetPlayerScore(playerName string) int {
 
-	var wins int
+	player := s.GetLeague().Find(playerName)
 
-	for _, player := range s.GetLeague() {
-		if player.Name == playerName {
-			wins = player.Wins
-			break
-		}
+	if player != nil {
+		return player.Wins
 	}
 
-	return wins
+	return 0
 }
 
-func (s *FileSystemPlayerStore) GetLeague() []Player {
+func (s *FileSystemPlayerStore) GetLeague() League {
 	s.db.Seek(0, 0)
 	league, _ := NewLeague(s.db)
 	return league
@@ -31,11 +28,10 @@ func (s *FileSystemPlayerStore) GetLeague() []Player {
 
 func (s *FileSystemPlayerStore) RecordWin(winner string) {
 	league := s.GetLeague()
+	player := league.Find(winner)
 
-	for i, player := range league {
-		if player.Name == winner {
-			league[i].Wins++
-		}
+	if player != nil {
+		player.Wins++
 	}
 
 	s.db.Seek(0, 0)
