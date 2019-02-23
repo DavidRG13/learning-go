@@ -14,7 +14,7 @@ func TestSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDB()
 
-		store := FileSystemPlayerStore{db}
+		store := NewFileSystemPlayerStore(db)
 
 		got := store.GetLeague()
 
@@ -32,7 +32,7 @@ func TestSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDB()
 
-		store := FileSystemPlayerStore{db}
+		store := NewFileSystemPlayerStore(db)
 
 		got := store.GetLeague()
 
@@ -54,7 +54,7 @@ func TestSystemStore(t *testing.T) {
         {"Name": "Chris", "Wins": 33}]`)
 		defer cleanDB()
 
-		store := FileSystemPlayerStore{db}
+		store := NewFileSystemPlayerStore(db)
 
 		got := store.GetPlayerScore("Chris")
 
@@ -67,7 +67,7 @@ func TestSystemStore(t *testing.T) {
         {"Name": "Chris", "Wins": 33}]`)
 		defer cleanDB()
 
-		store := FileSystemPlayerStore{db}
+		store := NewFileSystemPlayerStore(db)
 
 		store.RecordWin("Chris")
 
@@ -82,7 +82,7 @@ func TestSystemStore(t *testing.T) {
         {"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := FileSystemPlayerStore{database}
+		store := NewFileSystemPlayerStore(database)
 
 		store.RecordWin("Pepper")
 
