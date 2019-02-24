@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"learningGo/application/cmd/poker"
+	"strings"
 )
 
 type CLI struct {
@@ -12,9 +14,15 @@ type CLI struct {
 }
 
 func (cli CLI) PlayPoker() {
-	cli.store.RecordWin("Chris")
+	scanner := bufio.NewScanner(cli.in)
+	scanner.Scan()
+	cli.store.RecordWin(extractWinner(scanner.Text()))
 }
 
 func main() {
 	fmt.Println("Let's play poker")
+}
+
+func extractWinner(userInput string) string {
+	return strings.Replace(userInput, " wins", "", 1)
 }
