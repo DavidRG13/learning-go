@@ -13,7 +13,7 @@ func TestSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDB()
 
-		store := NewFileSystemPlayerStore(db)
+		store, err := NewFileSystemPlayerStore(db)
 
 		got := store.GetLeague()
 
@@ -23,6 +23,7 @@ func TestSystemStore(t *testing.T) {
 		}
 
 		assertLeague(t, got, want)
+		assertNoError(t, err)
 	})
 
 	t.Run("/league from reader twice", func(t *testing.T) {
@@ -31,7 +32,7 @@ func TestSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDB()
 
-		store := NewFileSystemPlayerStore(db)
+		store, err := NewFileSystemPlayerStore(db)
 
 		got := store.GetLeague()
 
@@ -45,6 +46,7 @@ func TestSystemStore(t *testing.T) {
 		// read again
 		got = store.GetLeague()
 		assertLeague(t, got, want)
+		assertNoError(t, err)
 	})
 
 	t.Run("get player score", func(t *testing.T) {
@@ -53,11 +55,12 @@ func TestSystemStore(t *testing.T) {
         {"Name": "Chris", "Wins": 33}]`)
 		defer cleanDB()
 
-		store := NewFileSystemPlayerStore(db)
+		store, err := NewFileSystemPlayerStore(db)
 
 		got := store.GetPlayerScore("Chris")
 
 		assertScoreEquals(t, got, 33)
+		assertNoError(t, err)
 	})
 
 	t.Run("store wins for existing players", func(t *testing.T) {
@@ -66,13 +69,14 @@ func TestSystemStore(t *testing.T) {
         {"Name": "Chris", "Wins": 33}]`)
 		defer cleanDB()
 
-		store := NewFileSystemPlayerStore(db)
+		store, err := NewFileSystemPlayerStore(db)
 
 		store.RecordWin("Chris")
 
 		got := store.GetPlayerScore("Chris")
 		want := 34
 		assertScoreEquals(t, got, want)
+		assertNoError(t, err)
 	})
 
 	t.Run("store wins for new players", func(t *testing.T) {
@@ -81,19 +85,27 @@ func TestSystemStore(t *testing.T) {
         {"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := NewFileSystemPlayerStore(database)
+		store, err := NewFileSystemPlayerStore(database)
 
 		store.RecordWin("Pepper")
 
 		got := store.GetPlayerScore("Pepper")
 		want := 1
 		assertScoreEquals(t, got, want)
+		assertNoError(t, err)
 	})
 }
 
 func assertScoreEquals(t *testing.T, got int, want int) {
 	if got != want {
 		t.Errorf("got %d want %d", got, want)
+	}
+}
+
+func assertNoError(t *testing.T, err error) {
+	t.Helper()
+	if err != nil {
+		t.Fatalf("didnt expect an error but got one, %v", err)
 	}
 }
 

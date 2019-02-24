@@ -97,9 +97,9 @@ func TestStoreWins(t *testing.T) {
 }
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
-	database, cleanDatabase := createTempFile(t, "")
+	database, cleanDatabase := createTempFile(t, "[]")
 	defer cleanDatabase()
-	store := NewFileSystemPlayerStore(database)
+	store, _ := NewFileSystemPlayerStore(database)
 	server := NewPlayerServer(store)
 	player := "Pepper"
 
@@ -113,6 +113,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		assertStatus(t, response.Code, http.StatusOK)
 
 		assertResponseBody(t, response.Body.String(), "3")
+		//assertNoError(t, err)
 	})
 
 	t.Run("get league", func(t *testing.T) {
@@ -125,6 +126,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 			{"Pepper", 3},
 		}
 		assertLeague(t, got, want)
+		//assertNoError(t, err)
 	})
 }
 
